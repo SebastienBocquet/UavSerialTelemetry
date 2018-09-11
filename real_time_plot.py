@@ -9,6 +9,9 @@ import parser_ as pars
 import csv_stream_reader as reader
 import time
 import plotFactory as pltF
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 Config = configparser.ConfigParser()
@@ -19,8 +22,15 @@ displayParams = pars.ConfigSectionMap("Display", Config)
 Config.read("default.ini")
 defaultPlotParams = pars.ConfigSectionMap("Plot", Config)
 
-print(displayParams)
-print(defaultPlotParams)
+logging.info('\n'+'Displayed variables')
+for key, value in displayParams.items():
+    message = ':'.join([str(key), str(value)])
+    logging.info(message)
+
+logging.info('\n'+'Parameters used for plotting')
+for key, value in defaultPlotParams.items():
+    message = ':'.join([str(key), str(value)])
+    logging.info(message)
 
 dummySignal = False
 
@@ -28,7 +38,7 @@ dummySignal = False
 try:
     ser = serial.Serial(serialParams['portname'], serialParams['baudrate'])
 except:
-    print ('No data on serial port: generating a dummy signal for testing')
+    logging.info('No data on serial port: generating a dummy signal for testing')
     dummySignal = True
 
 ### START QtApp #####
@@ -41,12 +51,10 @@ for k in displayParams['key1']:
     displayedKey.append(k)
 for k in displayParams['key2']:
     displayedKey.append(k)
-# for k in displayParams['key3']:
-#     displayedKey.append(k)
-# for k in displayParams['key4']:
-#     displayedKey.append(k)
-
-print('Displayed variables', displayedKey)
+#for k in displayParams['key3']:
+#    displayedKey.append(k)
+#for k in displayParams['key4']:
+#    displayedKey.append(k)
 
 line = reader.Line()
 subLine = reader.SubLine()
@@ -54,12 +62,9 @@ displayedValue = np.empty((len(displayedKey)))
 
 
 # Realtime data plot. Each time this function is called, the data display is updated
-def update():
+def updateData():
 
-    global curve, ptr, Xm, displayedValue
-    # shift data in the temporal mean 1 sample left
-    for xm in Xms:
-        xm[:-1] = xm[1:]
+    global displayedValue
 
     updated_line = False
 
@@ -77,10 +82,24 @@ def update():
         for i, k in enumerate(displayedKey):
             displayedValue.append(np.cos(0.05 * ptr) + i)
 
-    # print (displayedValue)
+    logging.debug('\n'+'Displayed values')
+    for key in displayedValue:
+        message = ':'.join([str(key)])
+        logging.debug(message)
+
+    return updated_line
+
+
+def updatePlot():
+
+    global ptr, Xm, displayedValue
+
+    # shift data in the temporal mean 1 sample left
+    for xm in Xms:
+        xm[:-1] = xm[1:]
 
     # vector containing the instantaneous values
-    ptr += 1                              # update x position for displaying the curve
+    ptr += 1 # update x position for displaying the curve
     index = 0
     for p in plot.curves:
         for i, c in enumerate(p):
@@ -96,12 +115,11 @@ def update():
 
     QtGui.QApplication.processEvents()    # you MUST process the plot now
 
-    return updated_line
-
 
 if __name__ == '__main__':
 
     start = time.time()
+    TimeChunkSize = 40
 
     # width of the window displaying the curve
     windowWidth = displayParams['windowwidth']
@@ -113,16 +131,14 @@ if __name__ == '__main__':
 
     plot = pltF.plot
 
-    # while counter <= 40:
     incr = 1
     while True:
-        if update():
+        updatePlot()
+        updatedLine = updateData()
+        if updatedLine:
             incr += 1
-            # print (incr)
-            # print (time.time() - start)
-            if incr % 40 == 0:
-                print('read frequency = ', incr /
-                      (time.time() - start), 'lines per seconds')
+            if incr % TimeChunkSize == 0:
+                logging.info('Reading frequency = %.3f packets per second', incr / (time.time() - start))
                 incr = 0
                 start = time.time()
 
