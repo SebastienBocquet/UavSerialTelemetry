@@ -69,9 +69,9 @@ if __name__ == '__main__':
     windowWidth = displayParams['windowwidth']
 
     # create array that will contain the relevant time series
-    Xms = []
+    xms = []
     for i in range(len(displayedKey)):
-        Xms.append(np.linspace(0, 0, windowWidth))
+        xms.append(np.linspace(0, 0, windowWidth))
 
     plot = plt.Plot()
     plot.checkParams(displayParams, defaultPlotParams)
@@ -80,17 +80,6 @@ if __name__ == '__main__':
     plot.setLines(defaultPlotParams)
     windowWidth = displayParams['windowwidth']
     plot.ptr = -windowWidth
-    plot.run(Xms, displayedKey, displayedValue, data, ser, line, subLine)
-
-    # incr = 1
-    # while True:
-    #     displayedValue = plot.updatePlot(Xms, displayedValue)
-    #     updatedLine, displayedValue = updateData(displayedValue, plot.ptr)
-    #     if updatedLine:
-    #         incr += 1
-    #         if incr % TimeChunkSize == 0:
-    #             logging.info('Reading frequency = %.3f packets per second', incr / (time.time() - start))
-    #             incr = 0
-    #             start = time.time()
+    plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine)
 
     pg.QtGui.QApplication.exec_()  # you MUST put this at the end

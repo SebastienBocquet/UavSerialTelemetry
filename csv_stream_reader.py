@@ -1,4 +1,7 @@
 import numpy as np
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Line():
@@ -16,11 +19,11 @@ class Line():
         if self.endFound:
             self.nbPacketsMem = self.nbPackets
             self.endFound = True
-            # print ('nb of packets on line', self.nbPackets)
+            logging.debug('Number of read telemetry quantities %d' % self.nbPackets)
             try:
                 self.detect_incoherent_nb_packets()
             except ValueError as err:
-                print(err.args)
+                logging.debug(err.args)
 
     def clear(self,):
         self.str = ''
@@ -36,14 +39,18 @@ class Line():
                 value = p.split(':')[1]
                 self.dict[key] = value
 
+        logging.debug('read data arranged in following dictionnary')
+        for key, value in self.dict.items():
+            message = ':'.join([str(key), str(value)])
+            logging.debug(message)
+
     def read_value(self, key, displayedValue):
-        # print (self.dict)
         for i, k in enumerate(key):
             try:
                 displayedValue[i] = float(self.dict[k])
             except:
                 displayedValue[i] = np.nan
-                print('%s not successfully read' % k)
+                logging.info('%s not successfully read' % k)
         return displayedValue
 
     def detect_incoherent_nb_packets(self):
@@ -72,9 +79,9 @@ class SubLine():
         l = l.rstrip(b'\n')
         try:
             self.str = l.decode("utf-8")
-            # print (self.str)
+            #logging.debug(self.str)
         except:
-            print('Line from serial port could not be converted to unicode')
+            logging.debug('Line from serial port could not be converted to unicode')
             self.str = ''
         self.find_end()
 

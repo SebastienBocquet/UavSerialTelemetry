@@ -49,13 +49,13 @@ class Data():
             subLine.clear()
         else:
             displayedValue = []
-            for i in displayedKey:
+            for i in range(len(displayedKey)):
                 displayedValue.append(np.cos(0.05 * ptr) + i)
 
-        logging.debug('\n'+'Displayed values')
-        for key in displayedValue:
-            message = ':'.join([str(key)])
-            logging.debug(message)
+        # logging.debug('\n'+'Displayed values')
+        # for key in displayedValue:
+        #     message = ':'.join([str(key)])
+        #     logging.debug(message)
 
         return updated_line, displayedValue
 
@@ -71,6 +71,7 @@ class Plot():
         self.curves = []
         self.ptr = 0.
         self.timeChunkSize = 40
+        self.start = time.time()
 
     def setLines(self, defaultPlotParams):
         assert(defaultPlotParams['maxlineperplot'] <=
@@ -144,6 +145,6 @@ class Plot():
                 incr += 1
                 if incr % self.timeChunkSize == 0:
                     logging.info(
-                        'Reading frequency = %.3f packets per second', incr / (time.time() - start))
+                        'Reading frequency = %.3f packets per second', incr / (time.time() - self.start))
                     incr = 0
-                    start = time.time()
+                    self.start = time.time()
