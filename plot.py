@@ -49,7 +49,7 @@ class Data():
             subLine.clear()
         else:
             displayedValue = []
-            for i, k in enumerate(displayedKey):
+            for i in displayedKey:
                 displayedValue.append(np.cos(0.05 * ptr) + i)
 
         logging.debug('\n'+'Displayed values')
