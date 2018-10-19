@@ -5,7 +5,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 class Line():
-    def __init__(self,):
+    def __init__(self, ):
         self.str = ''
         self.dict = {}
         self.nbPackets = 0
@@ -25,13 +25,13 @@ class Line():
             except ValueError as err:
                 logging.debug(err.args)
 
-    def clear(self,):
+    def clear(self, ):
         self.str = ''
         self.dict = {}
         self.nbPackets = 0
         self.endFound = False
 
-    def convertToDictionary(self,):
+    def convertToDictionary(self, ):
         packets = self.str.split(';')
         for p in packets:
             if len(p.split(':')) > 1:
@@ -58,7 +58,7 @@ class Line():
             raise ValueError('WARNING, the expected number of packets is',
                              self.nbPacketsMem, 'while the actual number is', self.nbPackets)
 
-    def find_end(self,):
+    def find_end(self, ):
         packets = self.str.split(';')
         count = 0
         for p in packets:
@@ -69,7 +69,7 @@ class Line():
 
 
 class SubLine():
-    def __init__(self,):
+    def __init__(self, ):
         self.str = ''
         self.endFound = False
         self.nbPackets = 0
@@ -79,18 +79,18 @@ class SubLine():
         l = l.rstrip(b'\n')
         try:
             self.str = l.decode("utf-8")
-            #logging.debug(self.str)
+            # logging.debug(self.str)
         except:
             logging.debug('Line from serial port could not be converted to unicode')
             self.str = ''
         self.find_end()
 
-    def clear(self,):
+    def clear(self, ):
         self.str = ''
         self.endFound = False
         self.nbPackets = 0
 
-    def find_end(self,):
+    def find_end(self, ):
         packets = self.str.split(';')
         count = 0
         for p in packets:

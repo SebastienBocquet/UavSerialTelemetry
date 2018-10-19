@@ -1,18 +1,16 @@
-import configparser
 import json
 
 
 def ConfigFileWriter(config):
-
     # # lets create that config file for next time...
-    cfgfile = open("telemetry.ini",'w')
+    cfgfile = open("telemetry.ini", 'w')
 
     # add the settings to the structure of the file, and lets write it out...
     config.add_section("Serial")
-    config.set("Serial","portName","COM4")
-    config.set('Serial','baudRate', '19200')
+    config.set("Serial", "portName", "COM4")
+    config.set('Serial', 'baudRate', '19200')
     config.add_section("Display")
-    config.set("Display","key","sonh")
+    config.set("Display", "key", "sonh")
     config.write(cfgfile)
     cfgfile.close()
 

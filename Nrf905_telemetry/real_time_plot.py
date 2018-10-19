@@ -1,17 +1,15 @@
-import sys
-import numpy as np
-from pyqtgraph.Qt import QtGui, QtCore
-import pyqtgraph as pg
-import serial
 import configparser
-import json
-import parser_ as pars
-import csv_stream_reader as reader
-import plot as plt
 import logging
 
-logging.basicConfig(level=logging.INFO)
+import csv_stream_reader as reader
+import numpy as np
+import parser_ as pars
+import plot as plt
+import pyqtgraph as pg
+import serial
+from pyqtgraph.Qt import QtGui
 
+logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
 
@@ -23,12 +21,12 @@ if __name__ == '__main__':
     Config.read("default.ini")
     defaultPlotParams = pars.ConfigSectionMap("Plot", Config)
 
-    logging.info('\n'+'Displayed variables')
+    logging.info('\n' + 'Displayed variables')
     for key, value in displayParams.items():
         message = ':'.join([str(key), str(value)])
         logging.info(message)
 
-    logging.info('\n'+'Parameters used for plotting')
+    logging.info('\n' + 'Parameters used for plotting')
     for key, value in defaultPlotParams.items():
         message = ':'.join([str(key), str(value)])
         logging.info(message)
@@ -53,9 +51,9 @@ if __name__ == '__main__':
         displayedKey.append(k)
     for k in displayParams['key2']:
         displayedKey.append(k)
-    #for k in displayParams['key3']:
+    # for k in displayParams['key3']:
     #    displayedKey.append(k)
-    #for k in displayParams['key4']:
+    # for k in displayParams['key4']:
     #    displayedKey.append(k)
 
     line = reader.Line()

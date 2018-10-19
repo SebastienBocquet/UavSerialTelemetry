@@ -1,11 +1,10 @@
 import configparser
-import parser_ as pars
-import pyqtgraph as pg
-import sys
-from pyqtgraph.Qt import QtGui, QtCore
 import time
-import numpy as np
 import logging
+import numpy as np
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
+import parser_ as pars
 
 logging.basicConfig(level=logging.INFO)
 
@@ -62,7 +61,7 @@ class Data():
 
 class Plot():
 
-    def __init__(self,):
+    def __init__(self, ):
         self.win = pg.GraphicsWindow(
             title="Signal from serial port")  # creates a window
         self.win.resize(1420, 840)
@@ -74,14 +73,14 @@ class Plot():
         self.start = time.time()
 
     def setLines(self, defaultPlotParams):
-        assert(defaultPlotParams['maxlineperplot'] <=
-               len(defaultPlotParams['linestyle']))
+        assert (defaultPlotParams['maxlineperplot'] <=
+                len(defaultPlotParams['linestyle']))
         for s in defaultPlotParams['linestyle']:
             self.lineStyle.append(lineStyleArgs[s])
 
     def setColors(self, defaultPlotParams):
-        assert(defaultPlotParams['maxlineperplot'] <=
-               len(defaultPlotParams['linecolor']))
+        assert (defaultPlotParams['maxlineperplot'] <=
+                len(defaultPlotParams['linecolor']))
         for c in defaultPlotParams['linecolor']:
             self.colors.append(c)
 
@@ -105,8 +104,8 @@ class Plot():
                             single_item.text, **legendLabelStyle)
 
     def checkParams(self, displayParams, defaultPlotParams):
-        assert(len(displayParams['key1']) <=
-               defaultPlotParams['maxlineperplot'])
+        assert (len(displayParams['key1']) <=
+                defaultPlotParams['maxlineperplot'])
 
     def updatePlot(self, Xms, displayedValue):
 
@@ -122,15 +121,15 @@ class Plot():
                 c.setPos(self.ptr, 0)
                 Xms[index][-1] = float(displayedValue[index])
                 if self.lineStyle[i] == 'solid':
-                    c.setData(Xms[index]+1e-16,
+                    c.setData(Xms[index] + 1e-16,
                               pen=pg.mkPen(self.colors[i], width=5))
                 else:
-                    c.setData(Xms[index]+1e-16, pen=pg.mkPen(
+                    c.setData(Xms[index] + 1e-16, pen=pg.mkPen(
                         self.colors[i], width=5, style=self.lineStyle[i]))
                 # set x position in the graph to 0
                 index += 1
 
-        QtGui.QApplication.processEvents()    # you MUST process the plot now
+        QtGui.QApplication.processEvents()  # you MUST process the plot now
 
         return Xms, displayedValue
 
