@@ -34,10 +34,9 @@ class Line():
     def convertToDictionary(self, ):
         packets = self.str.split(';')
         for p in packets:
-            if len(p.split(':')) > 1:
-                key = p.split(':')[0]
-                value = p.split(':')[1]
-                self.dict[key] = value
+            key = p[:2]
+            value = p[2:]
+            self.dict[key] = value
 
         logging.debug('read data arranged in following dictionnary')
         for key, value in self.dict.items():
@@ -79,7 +78,7 @@ class SubLine():
         l = l.rstrip(b'\n')
         try:
             self.str = l.decode("utf-8")
-            # logging.debug(self.str)
+            logging.debug(self.str)
         except:
             logging.debug('Line from serial port could not be converted to unicode')
             self.str = ''
