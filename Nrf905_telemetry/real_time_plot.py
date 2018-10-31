@@ -51,10 +51,6 @@ if __name__ == '__main__':
         displayedKey.append(k)
     for k in displayParams['key2']:
         displayedKey.append(k)
-    # for k in displayParams['key3']:
-    #    displayedKey.append(k)
-    # for k in displayParams['key4']:
-    #    displayedKey.append(k)
 
     line = reader.Line()
     subLine = reader.SubLine()
