@@ -66,6 +66,10 @@ class Line():
                 self.endFound = True
             self.nbPackets = count - 1
 
+    def write(self, file):
+        file.write((self.str+'\n').encode())
+
+
 
 class SubLine():
     def __init__(self, ):

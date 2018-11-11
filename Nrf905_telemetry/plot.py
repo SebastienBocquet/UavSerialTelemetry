@@ -29,8 +29,9 @@ start = time.time()
 
 class Data():
 
-    def __init__(self, dummySignal):
+    def __init__(self, dummySignal, outputFile):
         self.dummySignal = dummySignal
+        self.outputFile = outputFile
 
     # Realtime data plot. Each time this function is called, the data display is updated
     def updateData(self, displayedKey, displayedValue, ptr, ser, line, subLine):
@@ -42,6 +43,7 @@ class Data():
             line.concatenate(subLine)
             if line.endFound:
                 line.convertToDictionary()
+                line.write(self.outputFile)
                 displayedValue = line.read_value(displayedKey, displayedValue)
                 line.clear()
                 updated_line = True
@@ -55,6 +57,21 @@ class Data():
         # for key in displayedValue:
         #     message = ':'.join([str(key)])
         #     logging.debug(message)
+
+        return updated_line, displayedValue
+
+    def updateFromFile(self, displayedKey, displayedValue, line_from_file, line, subLine):
+
+        updated_line = False
+
+        line.str = line_from_file
+        line.find_end()
+        if line.endFound:
+            line.convertToDictionary()
+            displayedValue = line.read_value(displayedKey, displayedValue)
+            line.clear()
+            updated_line = True
+        subLine.clear()
 
         return updated_line, displayedValue
 

@@ -32,6 +32,7 @@ if __name__ == '__main__':
         logging.info(message)
 
     dummySignal = False
+    read_from_file = True
 
     # Create object serial port
     try:
@@ -55,7 +56,11 @@ if __name__ == '__main__':
     line = reader.Line()
     subLine = reader.SubLine()
 
-    data = plt.Data(dummySignal)
+    if read_from_file:
+        data = plt.Data(dummySignal, None)
+    else:
+        file = open('telemetry.out', 'wb')
+        data = plt.Data(dummySignal, file)
 
     displayedValue = np.empty((len(displayedKey)))
 
@@ -74,6 +79,15 @@ if __name__ == '__main__':
     plot.setLines(defaultPlotParams)
     windowWidth = displayParams['windowwidth']
     plot.ptr = -windowWidth
-    plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine)
+
+    if read_from_file:
+        file = open('telemetry.out')
+        for l in file.readlines():
+            xms, displayedValue = plot.updatePlot(xms, displayedValue)
+            updated_line, displayedValue = data.updateFromFile(displayedKey, displayedValue, l, line, subLine)
+        file.close()
+    else:
+        plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine)
+        file.close()
 
     pg.QtGui.QApplication.exec_()  # you MUST put this at the end
