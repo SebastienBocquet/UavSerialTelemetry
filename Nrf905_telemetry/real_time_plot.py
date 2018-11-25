@@ -32,7 +32,7 @@ if __name__ == '__main__':
         logging.info(message)
 
     dummySignal = False
-    read_from_file = True
+    read_from_file = False
 
     # Create object serial port
     try:
@@ -57,9 +57,13 @@ if __name__ == '__main__':
     subLine = reader.SubLine()
 
     if read_from_file:
+        log_filename = input('Enter log filename to be read : ')
         data = plt.Data(dummySignal, None)
     else:
-        file = open('telemetry.out', 'wb')
+        log_filename = input('Enter log filename to be written : ')
+        if log_filename == '':
+            log_filename = 'default_telemetry.out'
+        file = open(log_filename, 'wb')
         data = plt.Data(dummySignal, file)
 
     displayedValue = np.empty((len(displayedKey)))
@@ -81,7 +85,7 @@ if __name__ == '__main__':
     plot.ptr = -windowWidth
 
     if read_from_file:
-        file = open('telemetry.out')
+        file = open(log_filename)
         for l in file.readlines():
             xms, displayedValue = plot.updatePlot(xms, displayedValue)
             updated_line, displayedValue = data.updateFromFile(displayedKey, displayedValue, l, line, subLine)
