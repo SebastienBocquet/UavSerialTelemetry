@@ -39,6 +39,10 @@ typedef struct {
 	byte data[MAX_PACKET_SIZE];
 } packet_t;
 
+int buzzer_out_pin = 6;   // LED connected to digital pin 13
+int buzzer_in_pin = 5;     // pushbutton connected to digital pin 7
+int buzzer_val = 0;       // variable to store the read value
+
 static volatile byte newData[NRF905_MAX_PAYLOAD];
 static volatile bool gotNewData;
 
@@ -65,10 +69,18 @@ void setup()
 
 	Serial.begin(19200);
 	Serial.println(F("Ready"));
+
+  pinMode(buzzer_out_pin, OUTPUT);      // sets the digital pin 13 as output
+  pinMode(buzzer_in_pin, INPUT);        // sets the digital pin 7 as input
 }
 
 void loop()
 {
+  buzzer_val = digitalRead(buzzer_in_pin);     // read the input pin
+  digitalWrite(buzzer_out_pin, buzzer_val);    // sets the LED to the button's value
+  Serial.print(buzzer_val);
+  Serial.print("\n");
+  
 	packet_t packet;
 
 	// Send serial data
