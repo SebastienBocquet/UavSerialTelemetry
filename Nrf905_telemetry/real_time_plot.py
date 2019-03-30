@@ -32,7 +32,7 @@ if __name__ == '__main__':
         logging.info(message)
 
     dummySignal = False
-    read_from_file = False
+    read_from_file = serialParams['readfromfile']
 
     # Create object serial port
     try:
