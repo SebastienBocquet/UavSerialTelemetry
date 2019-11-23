@@ -32,12 +32,12 @@ if __name__ == '__main__':
         logging.info(message)
 
     dummySignal = False
-    read_from_file = serialParams['readfromfile']
+    read_from_file = serialParams['read_from_file']
     display_every = serialParams['display_every']
 
     # Create object serial port
     try:
-        ser = serial.Serial(serialParams['portname'], serialParams['baudrate'])
+        ser = serial.Serial(serialParams['port_name'], serialParams['baud_rate'])
     except:
         ser = None
         logging.info('No data on serial port: generating a dummy signal for testing')
@@ -70,20 +70,19 @@ if __name__ == '__main__':
     displayedValue = np.empty((len(displayedKey)))
 
     # width of the window displaying the curve
-    windowWidth = displayParams['windowwidth']
+    window_width = displayParams['window_width']
 
     # create array that will contain the relevant time series
     xms = []
     for i in range(len(displayedKey)):
-        xms.append(np.linspace(0, 0, windowWidth))
+        xms.append(np.linspace(0, 0, window_width))
 
     plot = plt.Plot()
     plot.checkParams(displayParams, defaultPlotParams)
     plot.setCurves(displayParams)
     plot.setColors(defaultPlotParams)
     plot.setLines(defaultPlotParams)
-    windowWidth = displayParams['windowwidth']
-    plot.ptr = -windowWidth
+    plot.ptr = -window_width
 
     if read_from_file:
         file = open(log_filename)
@@ -93,7 +92,6 @@ if __name__ == '__main__':
         file.close()
     else:
         plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine, display_every)
-        plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine)
         file.close()
 
     pg.QtGui.QApplication.exec_()  # you MUST put this at the end

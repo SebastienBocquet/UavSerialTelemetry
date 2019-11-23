@@ -150,20 +150,6 @@ class Plot():
 
         return Xms, displayedValue
 
-    def run(self, Xms, displayedKey, displayedValue, data, ser, line, subLine):
-
-        incr = 1
-        while True:
-            Xms, displayedValue = self.updatePlot(Xms, displayedValue)
-            updatedLine, displayedValue = data.updateData(
-                displayedKey, displayedValue, self.ptr, ser, line, subLine)
-            if updatedLine:
-                incr += 1
-                if incr % self.timeChunkSize == 0:
-                    logging.info(
-                        'Reading frequency = %.3f packets per second', incr / (time.time() - self.start))
-                    incr = 0
-                    self.start = time.time()
     def run(self, Xms, displayedKey, displayedValue, data, ser, line, subLine, display_every):
 
         incr = 1
