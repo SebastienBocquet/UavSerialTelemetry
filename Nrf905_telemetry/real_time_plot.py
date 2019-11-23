@@ -33,6 +33,7 @@ if __name__ == '__main__':
 
     dummySignal = False
     read_from_file = serialParams['readfromfile']
+    display_every = serialParams['display_every']
 
     # Create object serial port
     try:
@@ -91,6 +92,7 @@ if __name__ == '__main__':
             updated_line, displayedValue = data.updateFromFile(displayedKey, displayedValue, l, line, subLine)
         file.close()
     else:
+        plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine, display_every)
         plot.run(xms, displayedKey, displayedValue, data, ser, line, subLine)
         file.close()
 
