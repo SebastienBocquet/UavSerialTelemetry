@@ -1,2 +1,4 @@
 *.pyc
-*.ini
+Nrf905_telemetry/default.ini
+Nrf905_telemetry/telemetry.ini
+
